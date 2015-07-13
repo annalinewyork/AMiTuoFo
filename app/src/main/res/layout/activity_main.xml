@@ -13,17 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:paddingTop="25dp"
-        android:src="@drawable/amtf_music_pic_4" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:visibility="visible"/>
+        android:src="@drawable/amtf_pic_60mins" />
 
     <LinearLayout
         android:id="@+id/buttonsWrap"
