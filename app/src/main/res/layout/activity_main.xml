@@ -6,6 +6,10 @@
     android:orientation="vertical"
     android:background="@drawable/bookbackground5">
 
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"/>
+
     <ImageView
         android:id="@+id/mainImage"
         android:layout_weight="1"
