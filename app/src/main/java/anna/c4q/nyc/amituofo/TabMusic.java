@@ -2,6 +2,7 @@ package anna.c4q.nyc.amituofo;
 
 
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,8 +25,10 @@ public class TabMusic extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_music, container, false);
 
+        imageButton = (ImageButton) v.findViewById(R.id.playButton);
+        mediaPlayer = MediaPlayer.create(getActivity(),R.raw.amitabha_43mb);
 
-
+        
 
         return v;
     }
