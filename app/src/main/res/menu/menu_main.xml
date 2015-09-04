@@ -9,11 +9,10 @@
         <!--app:showAsAction="never" />-->
 
     <item
-        android:id="@+id/questions"
+        android:id="@+id/goToQuestions"
         android:title="@string/questions"
         android:orderInCategory="200"
         app:showAsAction="always"
-        android:icon="@drawable/ic_help_white_24dp">
+        android:icon="@drawable/ic_toolbar_help"/>
 
-        </item>
 </menu>

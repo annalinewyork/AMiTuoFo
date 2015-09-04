@@ -1,10 +1,40 @@
 <resources>
-    <string name="app_name">南无阿弥陀佛</string>
+    <string name="app_name"> 南無阿彌陀佛</string>
 
     <string name="action_settings">Settings</string>
     <string name="questions">questions</string>
     <string name="title_activity_main">MainActivity</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="title_activity_question">QuestionActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_content">经文</string>
+    <string name="text_content">南无阿弥陀佛，因为此六字在佛教中的重要影响力，故有另一个代名词——六字洪名。\n
+六字洪名的含义：\n
+南无------皈命、接受；\n
+阿-----无量光（健康）；\n
+弥-----无量觉（智慧）；\n
+陀-----无量寿（长寿）；\n
+佛-----无量光、无量觉、无量寿的信息。\n
+“南无阿弥陀佛”六字洪名的意思是：我愿意接受无量光，我愿意接受无量智慧，我愿意接受无量长寿。</string>
+    <string name="text_detail1">一称“南无阿弥陀佛”，所具足的善根无量无边，可以进入极乐国土。《观经》言：心想佛时，是心即是三十二相、八十种好。我们称念“南无阿弥陀佛”，忆佛念佛，当下就是三十二相、八十种好了，具足了佛的无上功德 ── 当然是我们内心具备的，还没有完全开发出来，是在六字名号当中 ── “是心即是三十二相、八十种好。”当下念佛，当下就成佛。</string>
+    <string name="text_detail2">莲池大师曰：\n
+专持阿弥陀佛名号，犹胜持往生咒；\n
+亦胜持余咒，亦胜一切诸余功德。\n
+胜持往生咒者：\n
+持咒三十万遍，则见阿弥陀佛；\n
+持名则一日一夜，即佛现前。\n
+咒云：昼夜六时，各诵三七遍，能灭五逆等罪；\n
+持名则至心念佛一声，即灭八十亿劫生死重罪。\n
+胜持其他诸咒：\n
+专持名号，即大神咒，大明咒，无上咒，无等等咒。\n
+以十念得生，生即不退，威灵不测，大神咒也。\n
+一心不乱，断无明，见自性，大明咒也。\n\n
+
+往生极乐，究竟成佛，无上咒也。\n
+证无生忍，回入娑婆，普度众生，无等等咒也。\n
+念佛胜余功德者：\n
+六度万行，法门无量；\n
+专持名号，摄无不尽；以不出一心故。\n
+愿净业弟子，专其信愿，不二其心。\n
+古德多有原修余门者，尚当改修念佛。\n
+况原修念佛人，岂敢变其所守，而复他尚乎！</string>
 </resources>

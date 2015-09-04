@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primaryColor">#795548</color>
-    <color name="primaryColorDark">#5D4037</color>
-    <color name="accentColor">#EDDDD4</color>
-    <color name="primaryColorText">#EDDDD4</color>
+    <color name="primaryColor">#FFC107</color>
+    <color name="primaryColorDark">#FFA000</color>
+    <color name="accentColor">#595959</color>
+    <color name="primaryColorText">#595959</color>
+    <color name="tabBackgroundColor">#FFC107</color>
 </resources>
+
+
+
