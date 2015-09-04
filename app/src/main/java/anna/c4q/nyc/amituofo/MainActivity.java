@@ -16,7 +16,7 @@ public class MainActivity extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = { "经文", "音乐", "释义" };
+    CharSequence Titles[] = { "经 文", "音 乐", "每日佛语" };
     int Numboftabs = 3;
 
     @Override
@@ -46,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
         });
 
         tabs.setViewPager(pager);
+        pager.setCurrentItem(1);
     }
 
     @Override
