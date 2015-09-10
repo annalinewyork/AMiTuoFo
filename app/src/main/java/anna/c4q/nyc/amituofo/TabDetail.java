@@ -30,7 +30,7 @@ public class TabDetail extends Fragment {
                 Random randomSentence = new Random();
                 int randomNum = randomSentence.nextInt(sentence.length);
                 String singleSentence = sentence[randomNum];
-                textView.setText(""+""+singleSentence);
+                textView.setText(singleSentence);
             }
         });
 

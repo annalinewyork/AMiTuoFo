@@ -10,8 +10,8 @@
         android:id="@+id/detail_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="每天一句 清心解忧"
-        android:background="@color/tabDetailButton"/>
+        android:text="@string/tabDetailBtn"
+        android:background="@drawable/button_style"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -31,7 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:typeface="monospace" />
+                android:typeface="monospace"
+                android:hint="@string/tabDetailHint"/>
 
         </LinearLayout>
     </ScrollView>

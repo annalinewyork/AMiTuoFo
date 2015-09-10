@@ -17,14 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="15dp">
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/questionsContent"
                 android:id="@+id/textView"
-                android:textSize="20dp"
+                android:textSize="17dp"
                 android:lineSpacingExtra="10dp"
                 android:layout_below="@+id/app_bar"
                 android:layout_centerHorizontal="true"

@@ -19,7 +19,7 @@ public class QuestionActivity extends ActionBarActivity {
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("程式说明");
+        getSupportActionBar().setTitle(R.string.chengshishuoming);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.hideOverflowMenu();

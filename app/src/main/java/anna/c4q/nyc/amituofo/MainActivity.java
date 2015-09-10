@@ -16,7 +16,7 @@ public class MainActivity extends ActionBarActivity {
     ViewPager pager;
     ViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = { "经 文", "音 乐", "每日佛语" };
+    CharSequence Titles[] = {"經 文", "音 樂", "智慧佛語" };
     int Numboftabs = 3;
 
     @Override
@@ -40,7 +40,6 @@ public class MainActivity extends ActionBarActivity {
         tabs.setCustomTabColorizer(new TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-
                 return R.color.accentColor;
             }
         });

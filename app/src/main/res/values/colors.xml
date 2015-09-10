@@ -6,7 +6,7 @@
     <color name="accentColor">#595959</color>
     <color name="primaryColorText">#595959</color>
     <color name="tabBackgroundColor">#FFC107</color>
-    <color name="tabDetailButton">#CBA328</color>
+    <color name="appButton">#CBA328</color>
 </resources>
 
 
