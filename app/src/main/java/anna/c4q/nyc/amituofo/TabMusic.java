@@ -2,7 +2,6 @@ package anna.c4q.nyc.amituofo;
 
 
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -16,100 +15,95 @@ import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created on 9/3/15.
- */
 public class TabMusic extends Fragment {
 
 
     private MediaPlayer mediaPlayer;
-    private ImageButton btnPlay, btnPause, btnLoop;
-    private ImageView imageView;
+    private ImageButton btnPlay, btnPause, btnStop;
     private double startTime = 0;
     private double finalTime = 0;
     private Handler mHandler = new Handler();
-    private SeekBar seekBar;
+  //  private SeekBar seekBar;
     private TextView startText, finalText;
     public static int oneTimeOnly = 0;
 
     private boolean playing = false;
-    private boolean looping = false;
+    private boolean pause = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_music, container, false);
 
-        mediaPlayer = MediaPlayer.create(getActivity(), R.raw.amitabha_43mb);
         btnPlay = (ImageButton) v.findViewById(R.id.playButton);
         btnPause = (ImageButton) v.findViewById(R.id.pauseButton);
-        btnLoop = (ImageButton) v.findViewById(R.id.loopButton);
-        imageView = (ImageView) v.findViewById(R.id.mainImage);
+        btnStop = (ImageButton) v.findViewById(R.id.stopButton);
         startText = (TextView) v.findViewById(R.id.startText);
         finalText = (TextView) v.findViewById(R.id.finalText);
-        seekBar = (SeekBar) v.findViewById(R.id.seekbar);
-        seekBar.setClickable(false);
-        btnPause.setEnabled(false);
+      //  seekBar = (SeekBar) v.findViewById(R.id.seekbar);
+
+        btnPlay = (ImageButton) v.findViewById(R.id.playButton);
+
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(getActivity(), R.raw.amitabha_43mb);
+        }
 
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer.start();
+                if (!playing){
+                    playing = true;
+                    btnPlay.setImageResource(R.drawable.btn_play_pressed);
 
-                finalTime = mediaPlayer.getDuration();
-                startTime = mediaPlayer.getCurrentPosition();
-
-                if (oneTimeOnly == 0) {
-                    seekBar.setMax((int) finalTime);
-                    oneTimeOnly = 1;
+                    if (mediaPlayer != null){
+                        mediaPlayer.start();
+                    }
+                }else{
+                    playing = false;
+                    btnPlay.setImageResource(R.drawable.btn_play);
                 }
-                startText.setText(String.format("%d min, %d sec",
-                                TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
-                                TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
-                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) finalTime)))
-                );
-
-                finalText.setText(String.format("%d min, %d sec",
-                                TimeUnit.MILLISECONDS.toMinutes((long) startTime),
-                                TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
-                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) startTime)))
-                );
-
-                seekBar.setProgress((int) startTime);
-                boolean b = mHandler.postDelayed(UpdateSongTime, 1000);
-                btnPause.setEnabled(true);
-                btnPlay.setEnabled(false);
-
-
-
             }
         });
 
         btnPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer.pause();
-                btnPause.setEnabled(false);
-                btnPlay.setEnabled(true);
+                if (!pause){
+                    pause = true;
+                    btnPause.setImageResource(R.drawable.btn_pause);
+                    mediaPlayer.pause();
+                    btnPlay.setImageResource(R.drawable.btn_play);
+                }
+                else{
+                    pause = false;
+                    btnPause.setImageResource(R.drawable.btn_pause);
+                }
             }
         });
 
+        btnStop = (ImageButton)v.findViewById(R.id.stopButton);
+        btnStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mediaPlayer.isPlaying()){
+                    mediaPlayer.stop();
+                }
+                else {
+                mediaPlayer.start();
+                }
+            }
+        });
+
+        //set btn to "start play" again after music finished.
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                btnPlay.setImageResource(R.drawable.btn_play);
+                mediaPlayer.release();
+            }
+        });
+
+
         return v;
     }
-
-    private Runnable UpdateSongTime = new Runnable() {
-        public void run() {
-            startTime = mediaPlayer.getCurrentPosition();
-            startText.setText(String.format("%d min, %d sec",
-
-                            TimeUnit.MILLISECONDS.toMinutes((long) startTime),
-                            TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
-                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
-                                            toMinutes((long) startTime)))
-            );
-            seekBar.setProgress((int)startTime);
-            mHandler.postDelayed(this, 1000);
-        }
-    };
-
 }

@@ -66,16 +66,16 @@
             android:id="@+id/pauseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/btn_play"
+            android:src="@drawable/btn_pause"
             android:layout_marginBottom="15dp"
             android:layout_alignParentBottom="true"/>
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/loopButton"
+            android:id="@+id/stopButton"
             android:layout_marginBottom="15dp"
-            android:src="@drawable/btn_loop"
+            android:src="@drawable/ic_stop_black_18dp"
             android:layout_alignParentBottom="true"/>
 
     </LinearLayout>
