@@ -54,7 +54,7 @@
     <SeekBar
         android:id="@+id/seekbar"
         android:layout_marginTop="10dp"
-        style="?android:attr/progressBarStyleHorizontal"
+        style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_width="match_parent"
@@ -62,11 +62,12 @@
         android:max="100"/>
 
     <Button
+        android:layout_marginTop="6dp"
         android:id="@+id/buttonPlayStop"
         android:text="@string/play"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:background="@drawable/button_style"
+        android:background="@drawable/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

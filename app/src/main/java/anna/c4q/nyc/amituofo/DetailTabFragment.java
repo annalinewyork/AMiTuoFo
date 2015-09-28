@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import java.util.Random;
 
-public class TabDetail extends Fragment {
+public class DetailTabFragment extends Fragment {
 
     Button button;
     TextView textView;

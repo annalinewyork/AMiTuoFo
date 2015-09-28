@@ -27,11 +27,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                return new TabContent();
+                return new ContentTabFragment();
             case 1:
-                return new TabMusic();
+                return new MusicTabFragment();
             case 2:
-                return new TabDetail();
+                return new DetailTabFragment();
         }
 
         return null;

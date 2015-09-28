@@ -4,4 +4,15 @@
     android:padding="10dp">
     <solid android:color="@color/appButton" />
     <corners android:radius="60dp" />
+
+    <stroke
+        android:width="1px"
+        android:color="@color/primaryColorDark"
+        />
+
+    <gradient
+        android:startColor="@color/appButton"
+        android:endColor="@color/primaryColorDark"
+        android:angle="135"
+        />
 </shape>
