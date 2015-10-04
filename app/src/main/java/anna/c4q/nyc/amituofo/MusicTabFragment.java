@@ -17,8 +17,8 @@ import android.widget.SeekBar;
 public class MusicTabFragment extends Fragment {
 
     private Button buttonPlayStop;
-    private SeekBar seekbar;
-    private Handler seekHandler;
+  //  private SeekBar seekbar;
+  //  private Handler seekHandler;
 
     private MediaPlayer mediaPlayer;
     private boolean playing = false;
@@ -37,13 +37,13 @@ public class MusicTabFragment extends Fragment {
 
         buttonPlayStop = (Button) v.findViewById(R.id.buttonPlayStop);
 
-        seekHandler = new Handler();
-        seekbar = (SeekBar) v.findViewById(R.id.seekbar);
+//        seekHandler = new Handler();
+//        seekbar = (SeekBar) v.findViewById(R.id.seekbar);
 
-        int totalDuration = mediaPlayer.getDuration();
-        Log.i("mediaPlayer", "total duration=" + totalDuration);
-        seekbar.setMax(totalDuration);
-        seekUpdation();
+//        int totalDuration = mediaPlayer.getDuration();
+//        Log.i("mediaPlayer", "total duration=" + totalDuration);
+//        seekbar.setMax(totalDuration);
+//        seekUpdation();
 
         buttonPlayStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,50 +95,50 @@ public class MusicTabFragment extends Fragment {
         return v;
     }
 
-    Runnable run = new Runnable() {
-        @Override
-        public void run() {
-            if (!paused) {
-                seekUpdation();
-            }
-        }
-    };
+//    Runnable run = new Runnable() {
+//        @Override
+//        public void run() {
+//            if (!paused) {
+//                seekUpdation();
+//            }
+//        }
+//    };
+//
+//
+//    public void seekUpdation (){
+//        int currentPos = mediaPlayer.getCurrentPosition();
+//        Log.i("mediaPlayer", "currentPosition=" + currentPos);
+//        seekbar.setProgress(currentPos);
+//        seekHandler.postDelayed(run,1000);
+//    }
 
-
-    public void seekUpdation (){
-        int currentPos = mediaPlayer.getCurrentPosition();
-        Log.i("mediaPlayer", "currentPosition=" + currentPos);
-        seekbar.setProgress(currentPos);
-        seekHandler.postDelayed(run,1000);
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//
+//        if (mediaPlayer.isPlaying()) {
+//            mediaPlayer.pause();
+//            paused = true;
+//        }
+//
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (paused) {
+//            paused = false;
+//            mediaPlayer.start();
+//        }
+//    }
 
     @Override
-    public void onPause() {
-        super.onPause();
-
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-            paused = true;
-        }
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (paused) {
-            paused = false;
-            mediaPlayer.start();
-        }
-    }
-
-    @Override
-    public void onStop() {
+    public void onDestroy() {
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
         }
-        super.onStop();
+        super.onDestroy();
     }
 }

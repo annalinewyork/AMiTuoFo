@@ -51,15 +51,15 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_repeat_white_18dp"/>
 
-    <SeekBar
-        android:id="@+id/seekbar"
-        android:layout_marginTop="10dp"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:max="100"/>
+    <!--<SeekBar-->
+        <!--android:id="@+id/seekbar"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--style="@android:style/Widget.ProgressBar.Horizontal"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:max="100"/>-->
 
     <Button
         android:layout_marginTop="6dp"
