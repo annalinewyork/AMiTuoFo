@@ -7,11 +7,15 @@
         android:icon="@drawable/app_icon_market"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Base"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="singleTop">
         </activity>
         <activity
             android:name=".QuestionActivity"
@@ -28,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name="com.example.musicplayer.MusicService" />
     </application>
 
 </manifest>

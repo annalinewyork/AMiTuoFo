@@ -1,29 +1,28 @@
 package anna.c4q.nyc.amituofo;
 
-
-import android.media.MediaPlayer;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.SeekBar;
+import android.widget.MediaController;
 
 public class MusicTabFragment extends Fragment {
 
     private Button buttonPlayStop;
-  //  private SeekBar seekbar;
-  //  private Handler seekHandler;
-
-    private MediaPlayer mediaPlayer;
-    private boolean playing = false;
-    private boolean looping = false;
+    private MusicService musicSrv;
+    private Intent playIntent;
+    private boolean musicBound = false;
     private boolean paused = false;
+    private boolean playing = false;
+    private MusicController controller;
+
 
 
     @Override
@@ -31,20 +30,7 @@ public class MusicTabFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab_music, container, false);
 
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(getActivity(), R.raw.amitabha_43mb);
-        }
-
         buttonPlayStop = (Button) v.findViewById(R.id.buttonPlayStop);
-
-//        seekHandler = new Handler();
-//        seekbar = (SeekBar) v.findViewById(R.id.seekbar);
-
-//        int totalDuration = mediaPlayer.getDuration();
-//        Log.i("mediaPlayer", "total duration=" + totalDuration);
-//        seekbar.setMax(totalDuration);
-//        seekUpdation();
-
         buttonPlayStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,93 +38,100 @@ public class MusicTabFragment extends Fragment {
                 if (!playing) {
                     playing = true;
                     buttonPlayStop.setText("stop");
+                    musicSrv.playSong();
 
-                    if (mediaPlayer != null) {
-                        mediaPlayer.start();
-                    }
                 } else {
                     playing = false;
+
                     buttonPlayStop.setText("play");
+                    musicSrv.pausePlayer();
 
-                    if (mediaPlayer.isPlaying()) {
-                        mediaPlayer.pause();
-                    }
+
                 }
             }
-        });
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                buttonPlayStop.setText("play");
-            }
-        });
-
-        final ImageButton buttonLoop = (ImageButton)v.findViewById(R.id.buttonLoop);
-        buttonLoop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (!looping) {
-                    looping = true;
-                    buttonLoop.setImageResource(R.drawable.ic_repeat_black_18dp);
-                    mediaPlayer.setLooping(true);
-                } else {
-                    looping = false;
-                    buttonLoop.setImageResource(R.drawable.ic_repeat_white_18dp);
-                    mediaPlayer.setLooping(false);
-                }
-            }
-
         });
 
         return v;
     }
 
-//    Runnable run = new Runnable() {
-//        @Override
-//        public void run() {
-//            if (!paused) {
-//                seekUpdation();
-//            }
-//        }
-//    };
-//
-//
-//    public void seekUpdation (){
-//        int currentPos = mediaPlayer.getCurrentPosition();
-//        Log.i("mediaPlayer", "currentPosition=" + currentPos);
-//        seekbar.setProgress(currentPos);
-//        seekHandler.postDelayed(run,1000);
-//    }
+    private ServiceConnection musicConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+            musicSrv = binder.getService();
+            //bind to play the song ????
+            musicSrv.playSong();
+            musicBound = true;
+        }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//
-//        if (mediaPlayer.isPlaying()) {
-//            mediaPlayer.pause();
-//            paused = true;
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (paused) {
-//            paused = false;
-//            mediaPlayer.start();
-//        }
-//    }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            musicBound = false;
+        }
+    };
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (playIntent == null) {
+            //not sure if getActivity is correct? instead of "this"
+            playIntent = new Intent(getActivity(), MusicService.class);
+            getActivity().bindService(playIntent,musicConnection, Context.BIND_AUTO_CREATE);
+            getActivity().startService(playIntent);
+        }
+    }
+
+    public boolean canPause(){
+        return true;
+    }
+
+    public int getCurrentPosition(){
+        if(musicSrv!=null && musicBound && musicSrv.isPng()){
+            return  musicSrv.getPosn();
+        }
+        else return 0;
+    }
+
+    public boolean isPlaying(){
+        if (musicSrv!=null && musicBound){
+            return musicSrv.isPng();
+        }
+        return false;
+    }
+
+    public void seekTo (int pos){
+        musicSrv.seek(pos);
+    }
+
+    public void start(){
+        musicSrv.go();
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        paused = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (paused){
+            paused=false;
+        }
+    }
+
+    @Override
+    public void onStop() {
+        //controller.hide();
+        super.onStop();
+    }
 
     @Override
     public void onDestroy() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
+        //stopService(playIntent);
+        musicSrv=null;
         super.onDestroy();
     }
 }
