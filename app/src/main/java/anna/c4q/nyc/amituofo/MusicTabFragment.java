@@ -41,11 +41,9 @@ public class MusicTabFragment extends Fragment {
                     buttonPlayStop.setText("stop");
                     if (musicSrv != null) {
                         musicSrv.resumePlaying();
-                    }
-                    else {
+                    } else {
                         Log.w(TAG, "music service not ready yet");
                     }
-
                 } else {
                     playing = false;
                     buttonPlayStop.setText("play");
@@ -89,7 +87,6 @@ public class MusicTabFragment extends Fragment {
     public void onStart() {
         super.onStart();
         if (playIntent == null) {
-            //not sure if getActivity is correct? instead of "this"
             playIntent = new Intent(getActivity(), MusicService.class);
             getActivity().bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
             getActivity().startService(playIntent);
