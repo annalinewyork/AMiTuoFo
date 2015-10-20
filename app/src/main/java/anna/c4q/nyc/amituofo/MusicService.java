@@ -1,82 +1,161 @@
 package anna.c4q.nyc.amituofo;
 
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 
-public class MusicService extends Service implements MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
-MediaPlayer.OnCompletionListener{
+public class MusicService extends Service implements
+        MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
+        MediaPlayer.OnCompletionListener {
 
+    private static final String TAG = MusicService.class.getSimpleName();
+    //media player
     private MediaPlayer player;
-    //track the position of song.
+    //song list
+    private ArrayList<Song> songs = new ArrayList<>();
+    //current position
     private int songPosn;
+    //binder
     private final IBinder musicBind = new MusicBinder();
+    //title of current song
+    private String songTitle="";
+    //notification id
+    private static final int NOTIFY_ID=1;
+    //shuffle flag and random
+    private boolean shuffle=false;
+    private Random rand;
 
-    @Override
-    public void onCreate() {
+    public void onCreate(){
+        //create the service
         super.onCreate();
-        songPosn = 0;
+
+        songs.add(new Song(1, "Amitabha song", "Amitabha author"));
+        //initialize position
+        songPosn=0;
+        //random
+        rand=new Random();
+        //create player
         player = new MediaPlayer();
+        //initialize
         initMusicPlayer();
     }
 
     public void initMusicPlayer(){
-        player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+        //set player properties
+        player.setWakeMode(getApplicationContext(),
+                PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
+        //set listeners
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
         player.setOnErrorListener(this);
     }
 
-    public class MusicBinder extends Binder{
-        MusicService getService (){
+    //binder
+    public class MusicBinder extends Binder {
+        MusicService getService() {
             return MusicService.this;
         }
     }
 
+    //activity will bind to service
     @Override
     public IBinder onBind(Intent intent) {
         return musicBind;
     }
 
+    //release resources when unbind
     @Override
-    public boolean onUnbind(Intent intent) {
+    public boolean onUnbind(Intent intent){
         player.stop();
         player.release();
         return false;
     }
 
-    public void playSong (){
+    //play a song
+    public void playSong(){
+        Log.d(TAG, "playSong");
         player.reset();
-        player = MediaPlayer.create(this,R.raw.amitabha_43mb);
+        //get song
+        Song playSong = songs.get(songPosn);
+        //get title
+        songTitle=playSong.getTitle();
 
+        Context context = getApplicationContext();
+        Uri mp3 = Uri.parse("android.resource://"
+                + context.getPackageName() + "/raw/" + R.raw.amitabha_43mb);
+
+        //set the data source
+        try {
+//            player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            player.setDataSource(getApplicationContext(), mp3);
+        }
+        catch(Exception e){
+            Log.e("MUSIC SERVICE", "Error setting data source", e);
+        }
+        player.prepareAsync();
     }
+
+    public void resumePlaying() {
+        player.start();
+    }
+
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if (player.getCurrentPosition()>0){
+        //check if playback has reached the end of a track
+        if(player.getCurrentPosition()>0){
             mp.reset();
-            player.start();
+            playNext();
         }
     }
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
+        Log.v("MUSIC PLAYER", "Playback Error");
         mp.reset();
         return false;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onPrepared(MediaPlayer mp) {
+        //start playback
         mp.start();
+        //notification
+        Intent notIntent = new Intent(this, MainActivity.class);
+        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendInt = PendingIntent.getActivity(this, 0,
+                notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification.Builder builder = new Notification.Builder(this);
+
+        builder.setContentIntent(pendInt)
+                .setSmallIcon(R.drawable.play)
+                .setTicker(songTitle)
+                .setOngoing(true)
+                .setContentTitle("Playing")
+                .setContentText(songTitle);
+        Notification not = builder.build();
+        startForeground(NOTIFY_ID, not);
     }
 
+    //playback methods
     public int getPosn(){
         return player.getCurrentPosition();
     }
@@ -89,11 +168,19 @@ MediaPlayer.OnCompletionListener{
         return player.isPlaying();
     }
 
+    public boolean isLoop(){
+        return player.isLooping();
+    }
+
+    public void switchLooping() {
+        player.setLooping(!isLoop());
+    }
+
     public void pausePlayer(){
         player.pause();
     }
 
-    public void seek (int posn){
+    public void seek(int posn){
         player.seekTo(posn);
     }
 
@@ -101,9 +188,38 @@ MediaPlayer.OnCompletionListener{
         player.start();
     }
 
+    //skip to previous track
+    public void playPrev(){
+        songPosn--;
+        if(songPosn<0) songPosn=songs.size()-1;
+        playSong();
+    }
+
+    //skip to next
+    public void playNext(){
+        if(shuffle){
+            int newSong = songPosn;
+            while(newSong==songPosn){
+                newSong=rand.nextInt(songs.size());
+            }
+            songPosn=newSong;
+        }
+        else{
+            songPosn++;
+            if(songPosn>=songs.size()) songPosn=0;
+        }
+        playSong();
+    }
+
     @Override
     public void onDestroy() {
         stopForeground(true);
+    }
+
+    //toggle shuffle
+    public void setShuffle(){
+        if(shuffle) shuffle=false;
+        else shuffle=true;
     }
 
 }

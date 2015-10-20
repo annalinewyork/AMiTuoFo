@@ -7,21 +7,23 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.MediaController;
+import android.widget.ImageButton;
 
 public class MusicTabFragment extends Fragment {
 
+    private static final String TAG = MusicTabFragment.class.getSimpleName();
     private Button buttonPlayStop;
+    private ImageButton buttonLoop;
     private MusicService musicSrv;
     private Intent playIntent;
     private boolean musicBound = false;
     private boolean paused = false;
     private boolean playing = false;
-    private MusicController controller;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -29,23 +31,40 @@ public class MusicTabFragment extends Fragment {
         View v = inflater.inflate(R.layout.tab_music, container, false);
 
         buttonPlayStop = (Button) v.findViewById(R.id.buttonPlayStop);
+        buttonLoop = (ImageButton) v.findViewById(R.id.buttonLoop);
+
         buttonPlayStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (!playing) {
                     playing = true;
                     buttonPlayStop.setText("stop");
-                    musicSrv.playSong();
+                    if (musicSrv != null) {
+                        musicSrv.resumePlaying();
+                    }
+                    else {
+                        Log.w(TAG, "music service not ready yet");
+                    }
 
                 } else {
                     playing = false;
-
                     buttonPlayStop.setText("play");
-                    musicSrv.pausePlayer();
-
+                    if (musicSrv != null) {
+                        musicSrv.pausePlayer();
+                    }
 
                 }
+            }
+        });
+
+        buttonLoop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (musicSrv.isLoop())
+                    buttonLoop.setImageResource(R.drawable.ic_repeat_black_18dp);
+                else
+                    buttonLoop.setImageResource(R.drawable.ic_repeat_white_18dp);
+                musicSrv.switchLooping();
             }
         });
 
@@ -57,8 +76,6 @@ public class MusicTabFragment extends Fragment {
         public void onServiceConnected(ComponentName name, IBinder service) {
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             musicSrv = binder.getService();
-            //bind to play the song ????
-            musicSrv.playSong();
             musicBound = true;
         }
 
@@ -74,34 +91,33 @@ public class MusicTabFragment extends Fragment {
         if (playIntent == null) {
             //not sure if getActivity is correct? instead of "this"
             playIntent = new Intent(getActivity(), MusicService.class);
-            getActivity().bindService(playIntent,musicConnection, Context.BIND_AUTO_CREATE);
+            getActivity().bindService(playIntent, musicConnection, Context.BIND_AUTO_CREATE);
             getActivity().startService(playIntent);
         }
     }
 
-    public boolean canPause(){
+    public boolean canPause() {
         return true;
     }
 
-    public int getCurrentPosition(){
-        if(musicSrv!=null && musicBound && musicSrv.isPng()){
-            return  musicSrv.getPosn();
-        }
-        else return 0;
+    public int getCurrentPosition() {
+        if (musicSrv != null && musicBound && musicSrv.isPng()) {
+            return musicSrv.getPosn();
+        } else return 0;
     }
 
-    public boolean isPlaying(){
-        if (musicSrv!=null && musicBound){
+    public boolean isPlaying() {
+        if (musicSrv != null && musicBound) {
             return musicSrv.isPng();
         }
         return false;
     }
 
-    public void seekTo (int pos){
+    public void seekTo(int pos) {
         musicSrv.seek(pos);
     }
 
-    public void start(){
+    public void start() {
         musicSrv.go();
     }
 
@@ -115,8 +131,8 @@ public class MusicTabFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (paused){
-            paused=false;
+        if (paused) {
+            paused = false;
         }
     }
 
@@ -129,7 +145,7 @@ public class MusicTabFragment extends Fragment {
     @Override
     public void onDestroy() {
         //stopService(playIntent);
-        musicSrv=null;
+        musicSrv = null;
         super.onDestroy();
     }
 }
