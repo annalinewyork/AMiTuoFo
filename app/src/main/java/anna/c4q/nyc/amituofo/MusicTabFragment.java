@@ -144,8 +144,8 @@ public class MusicTabFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        //stopService(playIntent);
         musicSrv = null;
+        getActivity().stopService(playIntent);
         super.onDestroy();
     }
 }
