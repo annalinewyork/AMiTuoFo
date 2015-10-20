@@ -23,8 +23,6 @@ public class MusicTabFragment extends Fragment {
     private boolean playing = false;
     private MusicController controller;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
