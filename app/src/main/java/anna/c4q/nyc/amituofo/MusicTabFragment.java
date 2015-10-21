@@ -59,9 +59,9 @@ public class MusicTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (musicSrv.isLoop())
-                    buttonLoop.setImageResource(R.drawable.ic_repeat_black_18dp);
-                else
                     buttonLoop.setImageResource(R.drawable.ic_repeat_white_18dp);
+                else
+                    buttonLoop.setImageResource(R.drawable.ic_repeat_black_18dp);
                 musicSrv.switchLooping();
             }
         });
